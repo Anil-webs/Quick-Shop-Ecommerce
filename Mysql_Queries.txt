@@ -1,0 +1,46 @@
+create database shopping;
+use shopping;
+create table customer(FirstName varchar(30) not null, UserName varchar(30) not null, Passwords varchar(30) not null);
+insert into customer(FirstName,UserName,Passwords)values('Kishor','Kishor123','kishor222');
+select * from customer;
+alter table customer drop Cust_SNo;
+drop table customer ;
+
+select firstname,username,passwords,confirmPassword from customer where username='anilku';
+select * from customer where username = 'anilkumar041' and passwords = '1234';
+delete from customer where Cust_SNo in (8);
+alter table customer change SINO  Cust_SNo int  not null;
+alter table customer drop primary key;
+alter table customer add Cust_SNo int auto_increment primary key not null;
+ALTER TABLE customer AUTO_INCREMENT=100;
+
+
+create table admin(UserName varchar(30) not null,Password varchar(30) not null);
+select * from admin;
+insert into admin values('admin','admin123');
+
+
+create table products(productId int primary key, productName varchar(30) not null, Quantity int not null, price double not null);
+drop table products;
+insert into products values(3,'Travel accessories',1,1000.00);
+select * from products;
+alter table products modify column productName longtext;
+
+
+create table cust_pro(SNo int primary key auto_increment, productId int not null, Cust_SNo int not null, FOREIGN KEY (productId) REFERENCES products(productId),FOREIGN KEY (Cust_SNo) REFERENCES customer(Cust_SNo) , Action varchar(30) not null );
+select * from cust_pro;
+insert into cust_pro(productId, Cust_SNo, Action) values(4,1,'like');
+update cust_pro set Action = "dislike" where Cust_SNo = 1 and productId = 4;
+delete from cust_pro where SNo in(3);
+
+/*
+	joins
+*/
+select ct.customber_id,ct.customber_fname,ct.customber_lname,ct.gender,i.invoice_id
+from customber_table as ct inner join invoice_table as i
+on ct.customber_id = i.invoice_id;
+
+select cu.FirstName,cu.UserName,p.productName,p.price,p.productId,cp.Action from customer as cu , products as p inner join cust_pro as cp
+ on p.productId =  cp.SNo where cu.Cust_SNo = 1 and  cp.Action = 'like';
+ 
+ select count(Action) from cust_pro where Cust_SNo = 1 and Action = 'like'
